@@ -33,8 +33,8 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
                     <?php
                     if (isset($search_query) && !empty($search_query)) :
 
-                        $query = $db -> prepare ("SELECT * FROM posts WHERE body LIKE :search OR title LIKE :search;");
-                        $query -> execute(['search' => "%$search_query%"]);
+                        $query = $db->prepare("SELECT * FROM posts WHERE body LIKE :search OR title LIKE :search;");
+                        $query->execute(['search' => "%$search_query%"]);
                         // $query = $db->prepare("SELECT * FROM posts WHERE body LIKE '%$search_query%' OR title LIKE '%$search_query%';");
                         // $query->execute();
 

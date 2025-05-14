@@ -2,7 +2,7 @@
                 <div class="row flex-column">
                     <div>
                         <p class="">
-                            کلیه حقوق محتوا این سایت متعلق به وب سایت webprog.io
+                            کلیه حقوق محتوا این سایت متعلق به وب سایت armindevelop.com
                             میباشد
                         </p>
                     </div>
