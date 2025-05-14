@@ -28,12 +28,18 @@
                     <?php
                         $query = $db->query("SELECT * FROM categories"); 
                         $cats = $query -> fetchALL(PDO::FETCH_OBJ);
-
+                        if(isset($_GET['category'])){
+                            $category_id = $_GET['category'];
+                        }
                         foreach($cats as $cat):
                     ?>
                     <li class="list-group-item">
                         <a
-                            class="link-body-emphasis text-decoration-none"
+                            class="link-body-emphasis text-decoration-none
+                            <?php
+                            if(isset($category_id) && $category_id == $cat -> id){echo " fw-bold ";} 
+                            ?>
+                            "
                             href="<?php echo "index.php?category=".$cat->id; ?>"
                             ><?php echo $cat->title; ?></a
                         >
@@ -47,32 +53,41 @@
                     <div class="card-body">
                         <p class="fw-bold fs-6">عضویت در خبرنامه</p>
 
-                        <form>
+                        <?php 
+                        $invalidInputEmail = "";
+                        $invalidInputName = "";
+                        $success_subscribe = "";
+                            if(isset($_POST['subscribe'])){
+                                if(empty(trim($_POST['email']))){
+                                    $invalidInputEmail="فیلد ایمیل الزامیست";
+                                }
+                                if(empty(trim($_POST['name']))){
+                                    $invalidInputName="فیلد نام الزامیست";
+                                }
+                                if(!empty(trim($_POST['name'])) && !empty(trim($_POST['name']))){
+                                    $name = $_POST['name'];
+                                    $email = $_POST['email'];
+                                    $query = $db->prepare("INSERT INTO subscribers  (`name`,`email`) VALUES (:name,:email) ");
+                                    $query->execute(['name' => $name, 'email' => $email]);
+
+                                    $success_subscribe = " عضویت شما با موفقیت انجام شد. ";
+                                }
+                            }
+                        ?>
+                        <div class="text-success"><?php echo $success_subscribe; ?></div>
+                        <form method="post">
                             <div class="mb-3">
-                                <label class="form-label"
-                                    >نام</label
-                                >
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                />
+                                <label class="form-label">نام</label>
+                                <input type="text" name="name" class="form-control"/>
+                                <div class="form-text text-danger"><?php echo $invalidInputName; ?></div>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label"
-                                    >ایمیل</label
-                                >
-                                <input
-                                    type="email"
-                                    class="form-control"
-                                />
+                                <label class="form-label">ایمیل</label> 
+                                <input type="email" name="email" class="form-control"/>
+                                <div class="form-text text-danger"><?php echo $invalidInputEmail; ?></div>
                             </div>
                             <div class="d-grid gap-2">
-                                <button
-                                    type="submit"
-                                    class="btn btn-secondary"
-                                >
-                                    ارسال
-                                </button>
+                                <button type="submit" name="subscribe" class="btn btn-secondary" > ارسال</button>
                             </div>
                         </form>
                     </div>
