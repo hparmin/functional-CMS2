@@ -3,23 +3,13 @@ include_once "include/layout/header.php";
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // $query = $db -> query("SELECT * FROM posts WHERE id = ':id' ");
-    // $query -> execute(['id' => "$id"]);
-    $query = $db->query("SELECT * FROM posts WHERE id = $id ");
-    $query->execute();
+    $query = $db -> prepare("SELECT * FROM posts WHERE `id` = :id ");
+    $query -> execute(['id' => $id]);
+    // $query = $db->query("SELECT * FROM posts WHERE id = $id ");
+    // $query->execute();
 
     $post = $query->fetch(PDO::FETCH_OBJ);
-
-    // get the category of post from db:
-    $query = $db->query("SELECT * FROM categories WHERE id = $post->category_id");
-    $cat = $query->fetch(PDO::FETCH_OBJ);
-
-    // get the comments of post from db:
-    $query = $db->query("SELECT * FROM comments WHERE post_id = $post->id AND status = 1");
-    $comments = $query->fetchALL(PDO::FETCH_OBJ);
 }
-
-
 ?>
 <main>
     <!-- Content -->
@@ -27,7 +17,15 @@ if (isset($_GET['id'])) {
         <div class="row">
             <!-- Posts & Comments Content -->
             <div class="col-lg-8">
-                <?php if ($post): ?>
+                <?php if ($post):
+                    // get the category of post from db:
+                    $query = $db->query("SELECT * FROM categories WHERE id = $post->category_id");
+                    $cat = $query->fetch(PDO::FETCH_OBJ);
+
+                    // get the comments of post from db:
+                    $query = $db->query("SELECT * FROM comments WHERE post_id = $post->id AND status = 1");
+                    $comments = $query->fetchALL(PDO::FETCH_OBJ);
+                ?>
                     <div class="row justify-content-center">
                         <!-- Post Section -->
                         <div class="col">
@@ -79,14 +77,14 @@ if (isset($_GET['id'])) {
                                             $invalidName = "لطفا نام خود را وارد کنید. ";
                                         }
                                         if (empty($_POST['comment'])) {
-                                             $invalidComment = "لطفا متن کامنت خود را بنویسید. ";
+                                            $invalidComment = "لطفا متن کامنت خود را بنویسید. ";
                                         }
-                                        if (!empty($_POST['comment']) && !empty($_POST['name'])){
+                                        if (!empty($_POST['comment']) && !empty($_POST['name'])) {
                                             $name = $_POST['name'];
                                             $comment = $_POST['comment'];
 
-                                            $query = $db -> prepare("INSERT INTO comments  (`name`,`comment`,`post_id`) VALUES (:name,:comment,:id)");
-                                            $query -> execute(['name' => $name,'comment' => $comment,'id' => $id]);
+                                            $query = $db->prepare("INSERT INTO comments  (`name`,`comment`,`post_id`) VALUES (:name,:comment,:id)");
+                                            $query->execute(['name' => $name, 'comment' => $comment, 'id' => $id]);
 
                                             $success_comment = " کامنت شما با موفقیت ارسال شد. <br> بعد از تایید ادمین نمایش داده خواهد شد. ";
                                         }
@@ -98,7 +96,7 @@ if (isset($_GET['id'])) {
                                             <label class="form-label">نام</label>
                                             <div class="form-text text-danger"><?php echo $invalidName ?></div>
                                             <input
-                                            name="name"
+                                                name="name"
                                                 type="text"
                                                 class="form-control" />
                                         </div>
@@ -106,11 +104,13 @@ if (isset($_GET['id'])) {
                                             <label class="form-label">متن کامنت</label>
                                             <div class="form-text text-danger"><?php echo $invalidComment ?></div>
                                             <textarea
-                                            name="comment"
+                                                name="comment"
                                                 class="form-control"
                                                 rows="3"></textarea>
                                         </div>
-                                        <div class="text-success"><?php if(isset($success_comment)){ echo $success_comment; } ?></div>
+                                        <div class="text-success"><?php if (isset($success_comment)) {
+                                                                        echo $success_comment;
+                                                                    } ?></div>
                                         <button
                                             type="submit"
                                             name="submit"
@@ -151,6 +151,8 @@ if (isset($_GET['id'])) {
                             <?php endif ?>
                         </div>
                     </div>
+                <?php else: ?>
+                    <div class="alert alert-danger">مقاله مورد نظر یافت نشد. </div>
                 <?php endif; ?>
             </div>
 
