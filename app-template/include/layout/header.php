@@ -14,17 +14,9 @@ $categories = $query -> fetchAll(PDO::FETCH_OBJ);
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>php tutorial || blog project || webprog.io</title>
 
-        <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-        />
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-            crossorigin="anonymous"
-        />
-
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
         <link rel="stylesheet" href="./assets/css/style.css" />
     </head>
 
@@ -41,11 +33,13 @@ $categories = $query -> fetchAll(PDO::FETCH_OBJ);
                 </a>
 
                 <nav class="d-inline-flex mt-2 mt-md-0 me-md-auto">
-                    <?php foreach($categories as $category): ?>
-                    <a
-                        class="fw-bold me-3 py-2 link-body-emphasis text-decoration-none"
-                        href="#"
-                        ><?php echo $category -> title; ?></a
-                    ><?php endforeach; ?>
+                    <?php if ($categories): ?>
+                        <?php foreach($categories as $category): ?>
+                        <a
+                            class="fw-bold me-3 py-2 link-body-emphasis text-decoration-none"
+                            href="#"
+                            ><?php echo $category -> title; ?></a
+                        ><?php endforeach; ?>
+                    <?php endif; ?>
                 </nav>
             </header>
