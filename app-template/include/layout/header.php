@@ -26,19 +26,22 @@ $categories = $query -> fetchAll(PDO::FETCH_OBJ);
                 class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom"
             >
                 <a
-                    href="index.html"
+                    href="index.php"
                     class="fs-4 fw-medium link-body-emphasis text-decoration-none"
                 >
                     webprog.io
                 </a>
 
                 <nav class="d-inline-flex mt-2 mt-md-0 me-md-auto">
-                    <?php if ($categories): ?>
-                        <?php foreach($categories as $category): ?>
+                    <?php if ($categories): 
+                        if(isset($_GET['category'])){
+                            $category_id = $_GET['category'];
+                        }
+                        foreach($categories as $category): ?>
                         <a
-                            class="fw-bold me-3 py-2 link-body-emphasis text-decoration-none"
-                            href="#"
-                            ><?php echo $category -> title; ?></a
+                            class="<?php if(isset($category_id) && $category_id == $category -> id){echo " fw-bold ";} ?> me-3 py-2 link-body-emphasis text-decoration-none"
+                            href="index.php?category=<?php echo $category->id; ?>
+                            "><?php echo $category -> title; ?></a
                         ><?php endforeach; ?>
                     <?php endif; ?>
                 </nav>

@@ -25,34 +25,20 @@
                 <div class="card mt-4">
                     <div class="fw-bold fs-6 card-header">دسته بندی ها</div>
                     <ul class="list-group list-group-flush p-0">
-                        <li class="list-group-item">
-                            <a
-                                class="link-body-emphasis text-decoration-none"
-                                href="#"
-                                >طبیعت</a
-                            >
-                        </li>
-                        <li class="list-group-item">
-                            <a
-                                class="link-body-emphasis text-decoration-none"
-                                href="#"
-                                >گردشگری</a
-                            >
-                        </li>
-                        <li class="list-group-item">
-                            <a
-                                class="link-body-emphasis text-decoration-none"
-                                href="#"
-                                >تکنولوژی</a
-                            >
-                        </li>
-                        <li class="list-group-item">
-                            <a
-                                class="link-body-emphasis text-decoration-none"
-                                href="#"
-                                >متفرقه</a
-                            >
-                        </li>
+                    <?php
+                        $query = $db->query("SELECT * FROM categories"); 
+                        $cats = $query -> fetchALL(PDO::FETCH_OBJ);
+
+                        foreach($cats as $cat):
+                    ?>
+                    <li class="list-group-item">
+                        <a
+                            class="link-body-emphasis text-decoration-none"
+                            href="<?php echo "index.php?category=".$cat->id; ?>"
+                            ><?php echo $cat->title; ?></a
+                        >
+                    </li>
+                    <?php endforeach; ?>
                     </ul>
                 </div>
 
