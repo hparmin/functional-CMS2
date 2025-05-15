@@ -1,21 +1,69 @@
 <?php
 include_once "./include/layout/header.php";
 
+// receive last 5 posts information from db:
 $query = $db->query("SELECT * FROM posts ORDER BY id DESC LIMIT 5");
 $posts = $query->fetchAll(PDO::FETCH_OBJ);
 
+// receive last 5 comments information from db:
 $query = $db->query("SELECT * FROM comments ORDER BY id DESC LIMIT 5");
 $comments = $query->fetchAll(PDO::FETCH_OBJ);
 
+// receive categories information from db:
 $query = $db->query("SELECT * FROM categories ORDER BY id DESC");
 $categories = $query->fetchAll(PDO::FETCH_OBJ);
 
+
+// check url query for actions:
+if (isset($_GET['entity']) && isset($_GET['action']) && isset($_GET['id'])) {
+    // check if it's post:
+    if ($_GET['entity'] == 'post') {
+        //check the action:
+        if ($_GET['action'] == 'delete') {
+            $id = $_GET['id'];
+            $query = $db->prepare("DELETE FROM posts WHERE id = :id");
+            $query->execute(['id' => $id]);
+
+            header("location:index.php?post-delete=$id");
+        }
+    }
+
+
+
+    // check if it's comment:
+    if ($_GET['entity'] == 'comment') {
+        // check the action:
+        if ($_GET['action'] == 'delete') {
+            $id = $_GET['id'];
+            $query = $db->prepare("DELETE FROM comments WHERE id = :id");
+            $query->execute(['id' => $id]);
+
+            header("location:index.php?comment-delete=$id");
+        }
+    }
+
+
+    // check if it's category:
+    if ($_GET['entity'] == 'category') {
+        // check the action:
+        if ($_GET['action'] == 'delete') {
+            $id = $_GET['id'];
+            $query = $db->prepare("DELETE FROM categories WHERE id = :id");
+            $query->execute(['id' => $id]);
+
+            header("location:index.php?category-delete=$id");
+        }
+    }
+}
+
+
+
+
+
+
+
 ?>
 
-<!-- <pre style="direction: ltr;">
-<?php // var_dump($posts); 
-?>
-</pre> -->
 
 
 <div class="container-fluid">
@@ -33,6 +81,14 @@ $categories = $query->fetchAll(PDO::FETCH_OBJ);
             <!-- Recently Posts -->
             <div class="mt-4">
                 <h4 class="text-secondary fw-bold">مقالات اخیر</h4>
+                <div class="text-success">
+                    <?php
+                    if (isset($_GET['post-delete'])) {
+                        $delete_post_id = $_GET['post-delete'];
+                        echo "پست شماره $delete_post_id با موفقیت حذف شد.";
+                    }
+                    ?>
+                </div>
                 <div class="table-responsive small">
                     <table class="table table-hover align-middle">
                         <thead>
@@ -54,7 +110,7 @@ $categories = $query->fetchAll(PDO::FETCH_OBJ);
                                             href="#"
                                             class="btn btn-sm btn-outline-dark">ویرایش</a>
                                         <a
-                                            href="#"
+                                            href="index.php?entity=post&action=delete&id=<?php echo $post->id; ?>"
                                             class="btn btn-sm btn-outline-danger">حذف</a>
                                     </td>
                                 </tr>
@@ -67,6 +123,14 @@ $categories = $query->fetchAll(PDO::FETCH_OBJ);
             <!-- Recently Comments -->
             <div class="mt-4">
                 <h4 class="text-secondary fw-bold">کامنت های اخیر</h4>
+                <div class="text-success">
+                    <?php
+                    if (isset($_GET['comment-delete'])) {
+                        $delete_comment_id = $_GET['comment-delete'];
+                        echo "کامنت شماره $delete_comment_id با موفقیت حذف شد.";
+                    }
+                    ?>
+                </div>
                 <div class="table-responsive small">
                     <table class="table table-hover align-middle">
                         <thead>
@@ -78,22 +142,22 @@ $categories = $query->fetchAll(PDO::FETCH_OBJ);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($comments as $comment): ?>
-                            <tr>
-                                <th><?php echo $comment -> id; ?></th>
-                                <td><?php echo $comment->name; ?></td>
-                                <td>
-                                    <?php echo $comment->comment; ?>
-                                </td>
-                                <td>
-                                    <a
-                                        href="#"
-                                        class="btn btn-sm btn-outline-dark disabled">تایید شده</a>
-                                    <a
-                                        href="#"
-                                        class="btn btn-sm btn-outline-danger">حذف</a>
-                                </td>
-                            </tr>
+                            <?php foreach ($comments as $comment): ?>
+                                <tr>
+                                    <th><?php echo $comment->id; ?></th>
+                                    <td><?php echo $comment->name; ?></td>
+                                    <td>
+                                        <?php echo $comment->comment; ?>
+                                    </td>
+                                    <td>
+                                        <a
+                                            href="#"
+                                            class="btn btn-sm btn-outline-dark disabled">تایید شده</a>
+                                        <a
+                                            href="index.php?entity=comment&action=delete&id=<?php echo $comment->id; ?>"
+                                            class="btn btn-sm btn-outline-danger">حذف</a>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -103,6 +167,14 @@ $categories = $query->fetchAll(PDO::FETCH_OBJ);
             <!-- Categories -->
             <div class="mt-4">
                 <h4 class="text-secondary fw-bold">دسته بندی</h4>
+                <div class="text-success">
+                    <?php
+                    if (isset($_GET['category-delete'])) {
+                        $delete_category_id = $_GET['category-delete'];
+                        echo "دسته بندی شماره $delete_category_id با موفقیت حذف شد.";
+                    }
+                    ?>
+                </div>
                 <div class="table-responsive small">
                     <table class="table table-hover align-middle">
                         <thead>
@@ -113,19 +185,19 @@ $categories = $query->fetchAll(PDO::FETCH_OBJ);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($categories as $category): ?>
-                            <tr>
-                                <th><?php echo $category -> id; ?></th>
-                                <td><?php echo $category -> title; ?></td>
-                                <td>
-                                    <a
-                                        href="#"
-                                        class="btn btn-sm btn-outline-dark">ویرایش</a>
-                                    <a
-                                        href="#"
-                                        class="btn btn-sm btn-outline-danger">حذف</a>
-                                </td>
-                            </tr>
+                            <?php foreach ($categories as $category): ?>
+                                <tr>
+                                    <th><?php echo $category->id; ?></th>
+                                    <td><?php echo $category->title; ?></td>
+                                    <td>
+                                        <a
+                                            href="#"
+                                            class="btn btn-sm btn-outline-dark">ویرایش</a>
+                                        <a
+                                            href="index.php?entity=category&action=delete&id=<?php echo $category->id; ?>"
+                                            class="btn btn-sm btn-outline-danger">حذف</a>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
