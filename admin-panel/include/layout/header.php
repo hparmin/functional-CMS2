@@ -10,7 +10,7 @@ $path = $_SERVER["REQUEST_URI"];
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>php tutorial || blog project || webprog.io</title>
+    <title>Armin's functional CMS</title>
 
     <link
         rel="stylesheet"

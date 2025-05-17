@@ -4,6 +4,17 @@ include_once "../../include/layout/header.php";
 $query = $db->query("SELECT * FROM categories");
 $categories = $query->fetchAll(PDO::FETCH_OBJ);
 
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    $query = $db->prepare("SELECT * FROM posts WHERE ID = :id");
+    $query->execute(["id" => $id]);
+    $post = $query->fetch(PDO::FETCH_OBJ);
+
+    if (!$post) {
+        die();
+    }
+}
 
 if (isset($_POST['addPost'])) {
 
@@ -29,27 +40,65 @@ if (isset($_POST['addPost'])) {
     if (empty(trim($_POST['body']))) {
         $body_error = " متن خالی است.";
     }
-    if (empty($_FILES['image']['tmp_name'])){
+    if (empty($_FILES['image']['tmp_name'])) {
         $file_erro = " لطفا تصویر را بارگزاری کنید. ";
     }
 
-    if (!empty($_FILES['image']['tmp_name']) && !empty(trim($_POST['body'])) && !empty(trim($_POST['author'])) && !empty(trim($_POST['title'])) && !empty(trim($_POST['category_id']))) {
+    if (/* !empty($_FILES['image']['tmp_name']) && */!empty(trim($_POST['body'])) && !empty(trim($_POST['author'])) && !empty(trim($_POST['title'])) && !empty(trim($_POST['category_id']))) {
         $title = $_POST['title'];
         $author = $_POST['author'];
         $category_id = $_POST['category_id'];
         $body = $_POST['body'];
 
-        $img_name = time() . "-" . $_FILES['image']['name'];
-        $tmp_name = $_FILES['image']['tmp_name'];
-        if (move_uploaded_file($tmp_name, "../../../uploads/posts/$img_name")) {
+        // $img_name = time() . "-" . $_FILES['image']['name'];
+        // $tmp_name = $_FILES['image']['tmp_name'];
+        // if (move_uploaded_file($tmp_name, "../../../uploads/posts/$img_name")) {
 
-            $query = $db->prepare("INSERT INTO posts (title, body,category_id,author,image) VALUES (:title, :body, :category_id, :author, :image) ");
-            $query -> execute(['title' => $title, 'body' => $body, 'category_id' => $category_id, 'author' => $author, 'image' => $img_name]);
-        }else{
-            echo "upload error";
+
+        if (!empty($_FILES['image']['tmp_name'])) {
+            $img_name = time() . "-" . $_FILES['image']['name'];
+            $tmp_name = $_FILES['image']['tmp_name'];
+            if (move_uploaded_file($tmp_name, "../../../uploads/posts/$img_name")) {
+                $query = $db->prepare("UPDATE posts 
+                      SET title = :title, 
+                          body = :body, 
+                          category_id = :category_id, 
+                          author = :author, 
+                          image = :image
+                      WHERE id = :id");
+
+                $query->execute([
+                    ':title' => $title,
+                    ':body' => $body,
+                    ':category_id' => $category_id,
+                    ':author' => $author,
+                    ':id' => $id,
+                    ':image' => $img_name
+                ]);
+            }
+        } else {
+            $query = $db->prepare("UPDATE posts 
+                      SET title = :title, 
+                          body = :body, 
+                          category_id = :category_id, 
+                          author = :author 
+                      WHERE id = :id");
+
+            $query->execute([
+                ':title' => $title,
+                ':body' => $body,
+                ':category_id' => $category_id,
+                ':author' => $author,
+                ':id' => $id
+            ]);
         }
+
+        header("location:edit.php?id=$id");
+    } else {
+        echo "upload error";
     }
 }
+//}
 ?>
 
 <div class="container-fluid">
@@ -76,7 +125,7 @@ if (isset($_POST['addPost'])) {
                             } ?>
                         </div>
                         <label class="form-label">عنوان مقاله</label>
-                        <input type="text" name="title" class="form-control" />
+                        <input type="text" name="title" value="<?php echo $post->title; ?>" class="form-control" />
                     </div>
 
                     <div class="col-12 col-sm-6 col-md-4">
@@ -86,7 +135,7 @@ if (isset($_POST['addPost'])) {
                             } ?>
                         </div>
                         <label class="form-label">نویسنده مقاله</label>
-                        <input type="text" name="author" class="form-control" />
+                        <input type="text" name="author" value="<?php echo $post->author; ?>" class="form-control" />
                     </div>
 
                     <div class="col-12 col-sm-6 col-md-4">
@@ -101,12 +150,17 @@ if (isset($_POST['addPost'])) {
                             <select class="form-select" name="category_id">
                                 <option value="">دسته بندی</option>
                                 <?php foreach ($categories as $category): ?>
-                                    <option value="<?php echo $category->id; ?>"><?php echo $category->title; ?></option>
+                                    <option value="<?php echo $category->id; ?>"
+                                        <?php if ($post->category_id == $category->id) {
+                                            echo "selected";
+                                        } ?>><?php echo $category->title; ?></option>
                                 <?php endforeach; ?>
                             </select>
                         <?php endif; ?>
                     </div>
-
+                    <div>
+                        <img style="max-width: 10%;" src="<?php echo UPLOADED_PATH . $post->image; ?>">
+                    </div>
                     <div class="col-12 col-sm-6 col-md-4">
                         <label for="formFile" class="form-label">تصویر مقاله</label>
                         <input class="form-control" name="image" type="file" />
@@ -122,14 +176,15 @@ if (isset($_POST['addPost'])) {
                         <textarea
                             name="body"
                             class="form-control"
-                            rows="6"></textarea>
+                            rows="6"><?php echo $post->body; ?></textarea>
                     </div>
-
                     <div class="col-12">
                         <button type="submit" name="addPost" class="btn btn-dark">
-                            ایجاد
+                            بروزرسانی
                         </button>
+
                     </div>
+
                 </form>
             </div>
         </main>

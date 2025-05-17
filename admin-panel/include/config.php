@@ -5,3 +5,5 @@ define("DB_PASS","");
 
 //define("PICTURES_PATH",realpath(dirname(__DIR__)."/assets/images/"));
 define("PICTURES_PATH","http://localhost/functional2/app-template/uploads/");
+
+define("UPLOADED_PATH","http://localhost/functional2/uploads/posts/");

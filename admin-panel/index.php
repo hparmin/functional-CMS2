@@ -23,13 +23,11 @@ if (isset($_GET['entity']) && isset($_GET['action']) && isset($_GET['id'])) {
             $id = $_GET['id'];
             $query = $db->prepare("DELETE FROM posts WHERE id = :id");
             $query->execute(['id' => $id]);
-            if($_GET['reback'] == "posts"){
+            if ($_GET['reback'] == "posts") {
                 header("location:/functional2/admin-panel/pages/posts/index.php?post-delete=$id");
-            }else{
+            } else {
                 header("location:index.php?post-delete=$id");
             }
-            
-            
         }
     }
 
@@ -43,7 +41,13 @@ if (isset($_GET['entity']) && isset($_GET['action']) && isset($_GET['id'])) {
             $query = $db->prepare("DELETE FROM comments WHERE id = :id");
             $query->execute(['id' => $id]);
 
-            header("location:index.php?comment-delete=$id");
+
+            if(($_GET['reback'] == "comments-delete")){
+                header("location:/functional2/admin-panel/pages/comments/index.php?deleted-comment=$id");
+            }else{
+                header("location:index.php?comment-delete=$id");
+            }
+            
         }
 
         //check the action (APPROVE):
@@ -52,7 +56,15 @@ if (isset($_GET['entity']) && isset($_GET['action']) && isset($_GET['id'])) {
             $query = $db->prepare("UPDATE comments SET status = '1' WHERE id = :id");
             $query->execute(['id' => $id]);
 
-            header("location:index.php?comment-approve=$id");
+
+
+            if ($_GET['reback'] == "comments-approve") {
+                header("location:/functional2/admin-panel/pages/comments/index.php?comment-approve=$id");
+            }elseif(($_GET['reback'] == "comments-delete")){
+                header("location:/functional2/admin-panel/pages/comments/index.php?deleted-comment=$id");
+            }else {
+                header("location:index.php?comment-approve=$id");
+            }
         }
     }
 
@@ -65,7 +77,11 @@ if (isset($_GET['entity']) && isset($_GET['action']) && isset($_GET['id'])) {
             $query = $db->prepare("DELETE FROM categories WHERE id = :id");
             $query->execute(['id' => $id]);
 
-            header("location:index.php?category-delete=$id");
+            if ($_GET['reback'] == "categories") {
+                header("location:/functional2/admin-panel/pages/categories/index.php?category-delete=$id");
+            } else {
+                header("location:index.php?category-delete=$id");
+            }
         }
     }
 }
@@ -120,7 +136,7 @@ if (isset($_GET['entity']) && isset($_GET['action']) && isset($_GET['id'])) {
                                     <td><?php echo $post->title; ?></td>
                                     <td><?php echo $post->author; ?></td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-outline-dark">ویرایش</a>
+                                        <a href="/functional2/admin-panel/pages/posts/edit.php?id=<?php echo $post->id; ?>" class="btn btn-sm btn-outline-dark">ویرایش</a>
                                         <a href="index.php?entity=post&action=delete&id=<?php echo $post->id; ?>"
                                             class="btn btn-sm btn-outline-danger">حذف</a>
                                     </td>
@@ -165,10 +181,10 @@ if (isset($_GET['entity']) && isset($_GET['action']) && isset($_GET['id'])) {
                                         <?php echo $comment->comment; ?>
                                     </td>
                                     <td>
-                                        <?php if($comment->status): ?>
-                                        <a href="#" class="btn btn-sm btn-outline-dark disabled">تایید شده</a>
+                                        <?php if ($comment->status): ?>
+                                            <a href="#" class="btn btn-sm btn-outline-dark disabled">تایید شده</a>
                                         <?php else: ?>
-                                        <a href="index.php?entity=comment&action=approve&id=<?php echo $comment->id; ?>" class="btn btn-sm btn-outline-info">در انتظار تایید</a>
+                                            <a href="index.php?entity=comment&action=approve&id=<?php echo $comment->id; ?>" class="btn btn-sm btn-outline-info">در انتظار تایید</a>
                                         <?php endif; ?>
                                         <a
                                             href="index.php?entity=comment&action=delete&id=<?php echo $comment->id; ?>"

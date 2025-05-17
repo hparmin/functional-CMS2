@@ -17,7 +17,9 @@
              <ul class="nav flex-column pe-3">
                  <li class="nav-item">
                      <a
-                         class="nav-link link-body-emphasis text-decoration-none d-flex align-items-center gap-2 <?php if(!str_contains($path,"pages")){echo "text-secondary";} ?>"
+                         class="nav-link link-body-emphasis text-decoration-none d-flex align-items-center gap-2 <?php if (!str_contains($path, "pages")) {
+                                                                                                                        echo "text-secondary";
+                                                                                                                    } ?>"
                          href="/functional2/admin-panel/index.php">
                          <i
                              class="bi bi-house-fill fs-4 text-secondary"></i>
@@ -27,7 +29,9 @@
 
                  <li class="nav-item">
                      <a
-                         class="nav-link link-body-emphasis text-decoration-none d-flex align-items-center gap-2 <?php if(str_contains($path,"posts")){echo "text-secondary";} ?>"
+                         class="nav-link link-body-emphasis text-decoration-none d-flex align-items-center gap-2 <?php if (str_contains($path, "posts")) {
+                                                                                                                        echo "text-secondary";
+                                                                                                                    } ?>"
                          href="/functional2/admin-panel/pages/posts/index.php">
                          <i
                              class="bi bi-file-earmark-image-fill fs-4 text-secondary"></i>
@@ -36,23 +40,23 @@
                  </li>
 
                  <li class="nav-item">
-                     <a
-                         class="nav-link link-body-emphasis text-decoration-none d-flex align-items-center gap-2 <?php if(str_contains($path,"categories")){echo "text-secondary";} ?>"
-                         href="./pages/categories/index.html">
-                         <i
-                             class="bi bi-folder-fill fs-4 text-secondary"></i>
-
+                     <a class="nav-link link-body-emphasis text-decoration-none d-flex align-items-center gap-2 <?php if (str_contains($path, "categories")) {
+                                                                                                                    echo "text-secondary";
+                                                                                                                } ?>"
+                         href="/functional2/admin-panel/pages/categories/index.php">
+                         <i class="bi bi-folder-fill fs-4 text-secondary"></i>
                          <span class="fw-bold">دسته بندی</span>
                      </a>
                  </li>
 
                  <li class="nav-item">
                      <a
-                         class="nav-link link-body-emphasis text-decoration-none d-flex align-items-center gap-2 <?php if(str_contains($path,"comments")){echo "text-secondary";} ?>"
-                         href="./pages/comments/index.html">
+                         class="nav-link link-body-emphasis text-decoration-none d-flex align-items-center gap-2 <?php if (str_contains($path, "comments")) {
+                                                                                                                        echo "text-secondary";
+                                                                                                                    } ?>"
+                         href="/functional2/admin-panel/pages/comments/index.php">
                          <i
                              class="bi bi-chat-left-text-fill fs-4 text-secondary"></i>
-
                          <span class="fw-bold">کامنت ها</span>
                      </a>
                  </li>

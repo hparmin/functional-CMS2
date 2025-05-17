@@ -57,7 +57,7 @@ include_once "../../include/layout/header.php";
                                         <td><?php echo $post->author; ?></td>
                                         <td>
                                             <a
-                                                href="./edit.html"
+                                                href="./edit.php?id=<?php echo $post->id; ?>"
                                                 class="btn btn-sm btn-outline-dark">ویرایش</a>
                                             <a
                                                 href="/functional2/admin-panel/index.php?entity=post&action=delete&reback=posts&id=<?php echo $post->id; ?>"
