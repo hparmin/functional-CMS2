@@ -1,6 +1,13 @@
 <?php
 include_once(__DIR__ . "/../config.php");
 include_once(__DIR__ . "/../db.php");
+session_start();
+
+if(!isset($_SESSION['email'])){
+    header("location:http://localhost/functional2/admin-panel/pages/auth/login.php");
+    die();
+}
+
 
 $path = $_SERVER["REQUEST_URI"];
 ?>

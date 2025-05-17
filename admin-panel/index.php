@@ -60,8 +60,6 @@ if (isset($_GET['entity']) && isset($_GET['action']) && isset($_GET['id'])) {
 
             if ($_GET['reback'] == "comments-approve") {
                 header("location:/functional2/admin-panel/pages/comments/index.php?comment-approve=$id");
-            }elseif(($_GET['reback'] == "comments-delete")){
-                header("location:/functional2/admin-panel/pages/comments/index.php?deleted-comment=$id");
             }else {
                 header("location:index.php?comment-approve=$id");
             }

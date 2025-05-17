@@ -1,14 +1,14 @@
 <?php
 include_once "../../include/layout/header.php";
 
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
     $titleerror = "";
-    if(isset($_POST['title']) && !empty($_POST['title'])){
+    if (isset($_POST['title']) && !empty($_POST['title'])) {
         $title = $_POST['title'];
 
         $query = $db->prepare("INSERT INTO categories (title) VALUES (:title) ");
-            $query -> execute(['title' => $title]);
-    }else{
+        $query->execute(['title' => $title]);
+    } else {
         $titleerror = " لطفا عنوان را وارد کنید. ";
     }
 }
@@ -30,11 +30,11 @@ if(isset($_POST['submit'])){
             <!-- Posts -->
             <div class="mt-4">
                 <form class="row g-4" method="post">
-                        <div class="text-danger">
-                            <?php if (!empty($titleerror)) {
-                                echo $titleerror;
-                            } ?>
-                        </div>
+                    <div class="text-danger">
+                        <?php if (!empty($titleerror)) {
+                            echo $titleerror;
+                        } ?>
+                    </div>
                     <div class="col-12 col-sm-6 col-md-4">
                         <label class="form-label">عنوان دسته بندی</label>
                         <input type="text" name="title" class="form-control" />

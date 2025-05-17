@@ -35,7 +35,7 @@ include_once "include/layout/header.php";
                             <div class="col-sm-6">
                                 <div class="card">
                                     <img
-                                        src="<?php echo PICTURES_PATH . $post->image; ?>"
+                                        src="<?php echo UPLOADED_PIC_PATH . $post->image; ?>"
                                         class="card-img-top"
                                         alt="post-image" />
                                     <div class="card-body">
