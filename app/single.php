@@ -31,7 +31,7 @@ if (isset($_GET['id'])) {
                         <div class="col">
                             <div class="card">
                                 <img
-                                    src="<?php echo PICTURES_PATH . $post->image; ?>"
+                                    src="<?php echo UPLOADED_PIC_PATH . $post->image; ?>"
                                     class="card-img-top"
                                     alt="post-image" />
                                 <div class="card-body">
